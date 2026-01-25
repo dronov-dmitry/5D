@@ -19,9 +19,12 @@ const dom = {
   signInBtn: document.getElementById("signInBtn"),
   logoutBtn: document.getElementById("logoutBtn"),
   paypalBtn: document.getElementById("paypalBtn"),
+  languageLabel: document.getElementById("languageLabel"),
+  languageSelect: document.getElementById("languageSelect"),
   accessBanner: document.getElementById("accessBanner"),
   serverStatusBanner: document.getElementById("serverStatusBanner"),
   adminPanel: document.getElementById("adminPanel"),
+  adminTitle: document.getElementById("adminTitle"),
   adminUserInput: document.getElementById("adminUserInput"),
   adminRoleSelect: document.getElementById("adminRoleSelect"),
   adminRoleBtn: document.getElementById("adminRoleBtn"),
@@ -29,6 +32,10 @@ const dom = {
   adminListOutput: document.getElementById("adminListOutput"),
   playBtn: document.getElementById("playBtn"),
   stepInput: document.getElementById("stepInput"),
+  stepLabel: document.getElementById("stepLabel"),
+  dateLabelTitle: document.getElementById("dateLabelTitle"),
+  selectedLabelTitle: document.getElementById("selectedLabelTitle"),
+  stageCostLabelTitle: document.getElementById("stageCostLabelTitle"),
   dateLabel: document.getElementById("dateLabel"),
   selectedLabel: document.getElementById("selectedLabel"),
   stageCostLabel: document.getElementById("stageCostLabel"),
@@ -36,11 +43,15 @@ const dom = {
   rangeLabel: document.getElementById("rangeLabel"),
   ganttCanvas: document.getElementById("ganttCanvas"),
   costsCanvas: document.getElementById("costsCanvas"),
+  ganttTitle: document.getElementById("ganttTitle"),
+  costsTitle: document.getElementById("costsTitle"),
+  viewTitle: document.getElementById("viewTitle"),
   viewer: document.getElementById("viewer"),
 };
 
 initConfig();
 initAuth();
+setLanguage(detectLanguage());
 
 window.addEventListener("error", () => {
   const warning = document.getElementById("initWarning");
@@ -86,7 +97,277 @@ const state = {
     configError: "",
     serverAvailable: true,
   },
+  locale: "en",
 };
+
+const I18N = {
+  en: {
+    account: "Account ▾",
+    notSignedIn: "Not signed in",
+    signIn: "Sign in with Google",
+    signOut: "Sign out",
+    language: "Language",
+    fbxPlaceholder: "FBX file path",
+    csvPlaceholder: "CSV file path",
+    load: "Load",
+    downloadIds: "Download FBX IDs",
+    play: "Play",
+    pause: "Pause",
+    stepDays: "Step (days)",
+    date: "Date:",
+    selected: "Selected:",
+    stageCost: "Stage cost:",
+    gantt: "Gantt",
+    costs: "Costs",
+    view3d: "3D View",
+    adminTools: "Admin tools",
+    adminInputPlaceholder: "User email or Google ID",
+    setRole: "Set role",
+    loadUsers: "Load users",
+    loadUsersFailed: "Failed to load users",
+    loading: "Loading...",
+    roleUpdated: "Role updated",
+    authRequired: "Sign in first.",
+    selectFiles: "Select both FBX and CSV files.",
+    noFbxIds: "No FBX IDs to download yet.",
+    serverCsvFailed: "Server CSV parsing failed.",
+    serverUnreachable: "Server is not reachable. Falling back to local CSV parsing.",
+    googleAuthFailed: "Google auth failed",
+    googleNotConfigured: "Google auth is not configured",
+    googleNotAvailable: "Google auth is not available. Check network/adblock.",
+    roleUpdatePrompt: "Enter user email or id and select role.",
+    roleUpdateFailed: "Role update failed",
+    missingFbxIds: "Missing FBX IDs: {ids}",
+    noCsvMatch:
+      "No CSV IDs matched the FBX. Showing all elements as completed.",
+    payPalOrderFailed: "PayPal order failed",
+    payPalApprovalMissing: "PayPal approval link not found",
+    payPalCaptureFailed: "PayPal capture failed",
+    payPalCompleted: "Payment completed.",
+    trialInvite: "Sign in to start your 3-day free trial.",
+    trialExpired: "Trial expired. Please subscribe for {price} {currency} / month.",
+    upgradeButton: "Upgrade {price} {currency} / month",
+    serverUnavailable:
+      "Server is unavailable. The site works from 07:00 to 23:00 Berlin time.",
+    berlinNow: "Berlin time now: {time}.",
+  },
+  de: {
+    account: "Konto ▾",
+    notSignedIn: "Nicht angemeldet",
+    signIn: "Mit Google anmelden",
+    signOut: "Abmelden",
+    language: "Sprache",
+    fbxPlaceholder: "FBX-Dateipfad",
+    csvPlaceholder: "CSV-Dateipfad",
+    load: "Laden",
+    downloadIds: "FBX-IDs herunterladen",
+    play: "Abspielen",
+    pause: "Pause",
+    stepDays: "Schritt (Tage)",
+    date: "Datum:",
+    selected: "Ausgewählt:",
+    stageCost: "Stufenkosten:",
+    gantt: "Gantt",
+    costs: "Kosten",
+    view3d: "3D-Ansicht",
+    adminTools: "Admin-Werkzeuge",
+    adminInputPlaceholder: "E-Mail oder Google-ID",
+    setRole: "Rolle setzen",
+    loadUsers: "Benutzer laden",
+    loadUsersFailed: "Benutzer konnten nicht geladen werden",
+    loading: "Laden...",
+    roleUpdated: "Rolle aktualisiert",
+    authRequired: "Bitte zuerst anmelden.",
+    selectFiles: "Wähle FBX- und CSV-Datei.",
+    noFbxIds: "Noch keine FBX-IDs zum Download.",
+    serverCsvFailed: "CSV-Parsing auf dem Server fehlgeschlagen.",
+    serverUnreachable:
+      "Server nicht erreichbar. Lokales CSV-Parsing wird verwendet.",
+    googleAuthFailed: "Google-Authentifizierung fehlgeschlagen",
+    googleNotConfigured: "Google-Authentifizierung ist nicht konfiguriert",
+    googleNotAvailable:
+      "Google-Authentifizierung ist nicht verfügbar. Netzwerk/Adblock prüfen.",
+    roleUpdatePrompt: "E-Mail/ID eingeben und Rolle wählen.",
+    roleUpdateFailed: "Rollen-Update fehlgeschlagen",
+    missingFbxIds: "Fehlende FBX-IDs: {ids}",
+    noCsvMatch:
+      "Keine CSV-IDs passen zum FBX. Alle Elemente als abgeschlossen.",
+    payPalOrderFailed: "PayPal-Bestellung fehlgeschlagen",
+    payPalApprovalMissing: "PayPal-Freigabelink nicht gefunden",
+    payPalCaptureFailed: "PayPal-Zahlung fehlgeschlagen",
+    payPalCompleted: "Zahlung abgeschlossen.",
+    trialInvite: "Melde dich an, um die 3-Tage-Testphase zu starten.",
+    trialExpired:
+      "Testzeit abgelaufen. Bitte {price} {currency} / Monat abonnieren.",
+    upgradeButton: "Upgrade {price} {currency} / Monat",
+    serverUnavailable:
+      "Server nicht erreichbar. Die Seite läuft von 07:00 bis 23:00 (Berlin).",
+    berlinNow: "Berliner Zeit: {time}.",
+  },
+  ru: {
+    account: "Аккаунт ▾",
+    notSignedIn: "Не выполнен вход",
+    signIn: "Войти через Google",
+    signOut: "Выйти",
+    language: "Язык",
+    fbxPlaceholder: "Путь к FBX",
+    csvPlaceholder: "Путь к CSV",
+    load: "Загрузить",
+    downloadIds: "Скачать FBX IDs",
+    play: "Старт",
+    pause: "Пауза",
+    stepDays: "Шаг (дни)",
+    date: "Дата:",
+    selected: "Выбрано:",
+    stageCost: "Стоимость этапа:",
+    gantt: "Гантт",
+    costs: "Затраты",
+    view3d: "3D вид",
+    adminTools: "Админ-инструменты",
+    adminInputPlaceholder: "Email пользователя или Google ID",
+    setRole: "Установить роль",
+    loadUsers: "Загрузить пользователей",
+    loadUsersFailed: "Не удалось загрузить пользователей",
+    loading: "Загрузка...",
+    roleUpdated: "Роль обновлена",
+    authRequired: "Сначала выполните вход.",
+    selectFiles: "Выберите FBX и CSV файлы.",
+    noFbxIds: "Нет FBX IDs для скачивания.",
+    serverCsvFailed: "Разбор CSV на сервере не удался.",
+    serverUnreachable:
+      "Сервер недоступен. Используется локальный разбор CSV.",
+    googleAuthFailed: "Ошибка авторизации Google",
+    googleNotConfigured: "Google авторизация не настроена",
+    googleNotAvailable:
+      "Google авторизация недоступна. Проверь сеть/AdBlock.",
+    roleUpdatePrompt: "Введите email/ID и выберите роль.",
+    roleUpdateFailed: "Не удалось обновить роль",
+    missingFbxIds: "Отсутствуют FBX IDs: {ids}",
+    noCsvMatch:
+      "ID из CSV не совпали с FBX. Показываю все элементы как завершенные.",
+    payPalOrderFailed: "Ошибка создания заказа PayPal",
+    payPalApprovalMissing: "Ссылка PayPal не найдена",
+    payPalCaptureFailed: "Ошибка оплаты PayPal",
+    payPalCompleted: "Платеж завершен.",
+    trialInvite: "Войдите, чтобы начать бесплатные 3 дня.",
+    trialExpired:
+      "Пробный период закончился. Подписка {price} {currency} / месяц.",
+    upgradeButton: "Подписка {price} {currency} / месяц",
+    serverUnavailable:
+      "Сервер недоступен. Сайт работает с 7:00 до 23:00 по Берлину.",
+    berlinNow: "Сейчас в Берлине: {time}.",
+  },
+  uk: {
+    account: "Акаунт ▾",
+    notSignedIn: "Вхід не виконано",
+    signIn: "Увійти через Google",
+    signOut: "Вийти",
+    language: "Мова",
+    fbxPlaceholder: "Шлях до FBX",
+    csvPlaceholder: "Шлях до CSV",
+    load: "Завантажити",
+    downloadIds: "Завантажити FBX IDs",
+    play: "Старт",
+    pause: "Пауза",
+    stepDays: "Крок (дні)",
+    date: "Дата:",
+    selected: "Вибрано:",
+    stageCost: "Вартість етапу:",
+    gantt: "Гантт",
+    costs: "Витрати",
+    view3d: "3D вигляд",
+    adminTools: "Адмін-інструменти",
+    adminInputPlaceholder: "Email користувача або Google ID",
+    setRole: "Встановити роль",
+    loadUsers: "Завантажити користувачів",
+    loadUsersFailed: "Не вдалося завантажити користувачів",
+    loading: "Завантаження...",
+    roleUpdated: "Роль оновлено",
+    authRequired: "Спочатку увійдіть.",
+    selectFiles: "Оберіть FBX та CSV файли.",
+    noFbxIds: "Немає FBX IDs для завантаження.",
+    serverCsvFailed: "Розбір CSV на сервері не вдався.",
+    serverUnreachable:
+      "Сервер недоступний. Використовується локальний розбір CSV.",
+    googleAuthFailed: "Помилка авторизації Google",
+    googleNotConfigured: "Google авторизацію не налаштовано",
+    googleNotAvailable:
+      "Google авторизація недоступна. Перевірте мережу/AdBlock.",
+    roleUpdatePrompt: "Введіть email/ID і виберіть роль.",
+    roleUpdateFailed: "Не вдалося оновити роль",
+    missingFbxIds: "Відсутні FBX IDs: {ids}",
+    noCsvMatch:
+      "ID з CSV не збіглися з FBX. Показую всі елементи як завершені.",
+    payPalOrderFailed: "Помилка створення PayPal замовлення",
+    payPalApprovalMissing: "Посилання PayPal не знайдено",
+    payPalCaptureFailed: "Помилка оплати PayPal",
+    payPalCompleted: "Оплату завершено.",
+    trialInvite: "Увійдіть, щоб почати 3 дні безкоштовно.",
+    trialExpired:
+      "Пробний період завершено. Підписка {price} {currency} / місяць.",
+    upgradeButton: "Підписка {price} {currency} / місяць",
+    serverUnavailable:
+      "Сервер недоступний. Сайт працює з 7:00 до 23:00 за Берліном.",
+    berlinNow: "Зараз у Берліні: {time}.",
+  },
+};
+
+function t(key, vars = {}) {
+  const lang = state.locale || "en";
+  const dict = I18N[lang] || I18N.en;
+  const template = dict[key] || I18N.en[key] || key;
+  return template.replace(/\{(\w+)\}/g, (_, name) => vars[name] ?? "");
+}
+
+function detectLanguage() {
+  const stored = localStorage.getItem("app_lang");
+  if (stored && I18N[stored]) return stored;
+  const nav = (navigator.language || "en").slice(0, 2).toLowerCase();
+  return I18N[nav] ? nav : "en";
+}
+
+function setLanguage(lang) {
+  state.locale = I18N[lang] ? lang : "en";
+  localStorage.setItem("app_lang", state.locale);
+  if (dom.languageSelect) {
+    dom.languageSelect.value = state.locale;
+  }
+  applyTranslations();
+}
+
+function applyTranslations() {
+  if (dom.accountMenuBtn) dom.accountMenuBtn.textContent = t("account");
+  if (dom.menuUserLine && !state.auth.user) {
+    dom.menuUserLine.textContent = t("notSignedIn");
+  }
+  if (dom.authStatus && !state.auth.user) {
+    dom.authStatus.textContent = t("notSignedIn");
+  }
+  if (dom.signInBtn) dom.signInBtn.textContent = t("signIn");
+  if (dom.logoutBtn) dom.logoutBtn.textContent = t("signOut");
+  if (dom.languageLabel) dom.languageLabel.textContent = t("language");
+  if (dom.fbxPath) dom.fbxPath.placeholder = t("fbxPlaceholder");
+  if (dom.csvPath) dom.csvPath.placeholder = t("csvPlaceholder");
+  if (dom.loadBtn) dom.loadBtn.textContent = t("load");
+  if (dom.downloadIdsBtn) dom.downloadIdsBtn.textContent = t("downloadIds");
+  if (dom.stepLabel) dom.stepLabel.textContent = t("stepDays");
+  if (dom.dateLabelTitle) dom.dateLabelTitle.textContent = t("date");
+  if (dom.selectedLabelTitle) dom.selectedLabelTitle.textContent = t("selected");
+  if (dom.stageCostLabelTitle)
+    dom.stageCostLabelTitle.textContent = t("stageCost");
+  if (dom.ganttTitle) dom.ganttTitle.textContent = t("gantt");
+  if (dom.costsTitle) dom.costsTitle.textContent = t("costs");
+  if (dom.viewTitle) dom.viewTitle.textContent = t("view3d");
+  if (dom.adminTitle) dom.adminTitle.textContent = t("adminTools");
+  if (dom.adminRoleBtn) dom.adminRoleBtn.textContent = t("setRole");
+  if (dom.adminListBtn) dom.adminListBtn.textContent = t("loadUsers");
+  if (dom.adminUserInput)
+    dom.adminUserInput.placeholder = t("adminInputPlaceholder");
+  if (state.isPlaying && dom.playBtn) dom.playBtn.textContent = t("pause");
+  if (!state.isPlaying && dom.playBtn) dom.playBtn.textContent = t("play");
+  updateAccessUi();
+  updateServerStatusBanner();
+}
 
 const renderer = new THREE.WebGLRenderer({
   antialias: CONFIG.viewer.antialias,
@@ -313,16 +594,21 @@ function attachAuthHandlers() {
         const hint = state.auth.configError
           ? ` (${state.auth.configError})`
           : "";
-        alert(`Google auth is not configured${hint}.`);
+        alert(`${t("googleNotConfigured")}${hint}.`);
         return;
       }
       const ready =
         state.auth.googleReady || (await ensureGoogleReady(clientId));
       if (!ready) {
-        alert("Google auth is not available. Check network/adblock.");
+        alert(t("googleNotAvailable"));
         return;
       }
       window.google?.accounts?.id?.prompt?.();
+    });
+  }
+  if (dom.languageSelect) {
+    dom.languageSelect.addEventListener("change", (event) => {
+      setLanguage(event.target.value);
     });
   }
   if (dom.logoutBtn) {
@@ -362,13 +648,13 @@ async function exchangeGoogleCredential(credential) {
     });
     const payload = await response.json();
     if (!response.ok) {
-      alert(payload.error || "Google auth failed");
+      alert(payload.error || t("googleAuthFailed"));
       return;
     }
     setAuthSession(credential, payload.user);
     await refreshMe();
   } catch (error) {
-    alert("Google auth failed");
+    alert(t("googleAuthFailed"));
   }
 }
 
@@ -427,12 +713,12 @@ function updateAuthUi() {
   if (dom.authStatus) {
     dom.authStatus.textContent = user
       ? `${user.name || user.email || "User"} (${user.role || "user"})`
-      : "Not signed in";
+      : t("notSignedIn");
   }
   if (dom.menuUserLine) {
     dom.menuUserLine.textContent = user
       ? `${user.name || user.email || "User"} (${user.role || "user"})`
-      : "Not signed in";
+      : t("notSignedIn");
   }
   if (dom.signInBtn) {
     dom.signInBtn.classList.toggle("hidden", !!user);
@@ -446,7 +732,7 @@ function updateAuthUi() {
     dom.paypalBtn.classList.toggle("hidden", !canUpgrade);
     const price = state.auth.config?.paypalPrice ?? 10;
     const currency = state.auth.config?.paypalCurrency ?? "EUR";
-    dom.paypalBtn.textContent = `Upgrade ${price} ${currency} / month`;
+    dom.paypalBtn.textContent = t("upgradeButton", { price, currency });
   }
   if (dom.adminPanel) {
     const isAdmin = user && user.role === "admin";
@@ -465,7 +751,7 @@ function updateAccessUi() {
   }
   if (!dom.accessBanner) return;
   if (!user) {
-    dom.accessBanner.textContent = "Sign in to start your 3-day free trial.";
+    dom.accessBanner.textContent = t("trialInvite");
     dom.accessBanner.classList.remove("hidden");
     return;
   }
@@ -475,8 +761,7 @@ function updateAccessUi() {
   }
   const price = state.auth.config?.paypalPrice ?? 10;
   const currency = state.auth.config?.paypalCurrency ?? "EUR";
-  dom.accessBanner.textContent =
-    `Trial expired. Please subscribe for ${price} ${currency} / month.`;
+  dom.accessBanner.textContent = t("trialExpired", { price, currency });
   dom.accessBanner.classList.remove("hidden");
 }
 
@@ -511,10 +796,8 @@ function updateServerStatusBanner() {
     return;
   }
   const nowBerlin = getBerlinTimeString();
-  const timeSuffix = nowBerlin ? ` Сейчас в Берлине: ${nowBerlin}.` : "";
-  dom.serverStatusBanner.textContent =
-    "Сервер недоступен. Сайт работает с 7:00 до 23:00 по берлинскому времени." +
-    timeSuffix;
+  const timeSuffix = nowBerlin ? ` ${t("berlinNow", { time: nowBerlin })}` : "";
+  dom.serverStatusBanner.textContent = `${t("serverUnavailable")}${timeSuffix}`;
   dom.serverStatusBanner.classList.remove("hidden");
 }
 
@@ -529,17 +812,18 @@ async function apiFetch(path, options = {}) {
 
 async function loadUserList() {
   if (!dom.adminListOutput) return;
-  dom.adminListOutput.textContent = "Loading...";
+  dom.adminListOutput.textContent = t("loading");
   try {
     const response = await apiFetch("/api/users");
     const payload = await response.json();
     if (!response.ok) {
-      dom.adminListOutput.textContent = payload.error || "Failed to load users";
+      dom.adminListOutput.textContent =
+        payload.error || t("loadUsersFailed");
       return;
     }
     dom.adminListOutput.textContent = JSON.stringify(payload.users, null, 2);
   } catch (error) {
-    dom.adminListOutput.textContent = "Failed to load users";
+    dom.adminListOutput.textContent = t("loadUsersFailed");
   }
 }
 
@@ -547,7 +831,7 @@ async function setUserRoleFromUi() {
   const input = dom.adminUserInput?.value?.trim() || "";
   const role = dom.adminRoleSelect?.value || "";
   if (!input || !role) {
-    alert("Enter user email or id and select role.");
+    alert(t("roleUpdatePrompt"));
     return;
   }
   const body = input.includes("@")
@@ -561,19 +845,19 @@ async function setUserRoleFromUi() {
     });
     const payload = await response.json();
     if (!response.ok) {
-      alert(payload.error || "Role update failed");
+      alert(payload.error || t("roleUpdateFailed"));
       return;
     }
-    alert("Role updated");
+    alert(t("roleUpdated"));
     await loadUserList();
   } catch (error) {
-    alert("Role update failed");
+    alert(t("roleUpdateFailed"));
   }
 }
 
 async function startPaypalCheckout() {
   if (!state.auth.token) {
-    alert("Sign in first.");
+    alert(t("authRequired"));
     return;
   }
   const currentUrl = new URL(window.location.href);
@@ -591,19 +875,19 @@ async function startPaypalCheckout() {
     });
     const payload = await response.json();
     if (!response.ok) {
-      alert(payload.error || "PayPal order failed");
+      alert(payload.error || t("payPalOrderFailed"));
       return;
     }
     const approveLink = payload.subscription?.links?.find(
       (link) => link.rel === "approve"
     );
     if (!approveLink?.href) {
-      alert("PayPal approval link not found");
+      alert(t("payPalApprovalMissing"));
       return;
     }
     window.location.href = approveLink.href;
   } catch (error) {
-    alert("PayPal order failed");
+    alert(t("payPalOrderFailed"));
   }
 }
 
@@ -626,14 +910,14 @@ async function capturePaypalSubscription(subscriptionId) {
     );
     const payload = await response.json();
     if (!response.ok) {
-      alert(payload.error || "PayPal capture failed");
+      alert(payload.error || t("payPalCaptureFailed"));
       return;
     }
     localStorage.removeItem("paypal_pending_subscription");
     await refreshMe();
-    alert("Payment completed.");
+    alert(t("payPalCompleted"));
   } catch (error) {
-    alert("PayPal capture failed");
+    alert(t("payPalCaptureFailed"));
   }
 }
 
@@ -665,7 +949,7 @@ dom.timeline.addEventListener("input", () => {
 dom.playBtn.addEventListener("click", () => {
   if (!state.projectStart || !state.projectEnd) return;
   state.isPlaying = !state.isPlaying;
-  dom.playBtn.textContent = state.isPlaying ? "Pause" : "Play";
+  dom.playBtn.textContent = state.isPlaying ? t("pause") : t("play");
   if (state.isPlaying) {
     startPlayback();
   } else {
@@ -675,7 +959,7 @@ dom.playBtn.addEventListener("click", () => {
 
 dom.loadBtn.addEventListener("click", async () => {
   if (!state.fbxFile || !state.csvFile) {
-    alert("Select both FBX and CSV files.");
+    alert(t("selectFiles"));
     return;
   }
   await loadAll();
@@ -683,7 +967,7 @@ dom.loadBtn.addEventListener("click", async () => {
 
 dom.downloadIdsBtn.addEventListener("click", () => {
   if (!state.fbxIdsText) {
-    alert("No FBX IDs to download yet.");
+    alert(t("noFbxIds"));
     return;
   }
   const blob = new Blob([state.fbxIdsText], { type: "text/plain" });
@@ -716,7 +1000,7 @@ dom.ganttCanvas.addEventListener("click", (event) => {
 
 async function loadAll() {
   stopPlayback();
-  dom.playBtn.textContent = "Play";
+  dom.playBtn.textContent = t("play");
   state.isPlaying = false;
   const [csvText, fbxObject] = await Promise.all([
     readFileAsText(state.csvFile),
@@ -743,12 +1027,12 @@ async function fetchSchedule(csvText) {
     });
     if (!response.ok) {
       const payload = await response.json().catch(() => ({}));
-      alert(payload.error || "Server CSV parsing failed.");
+      alert(payload.error || t("serverCsvFailed"));
       return null;
     }
     return await response.json();
   } catch (error) {
-    alert("Server is not reachable. Falling back to local CSV parsing.");
+    alert(t("serverUnreachable"));
     return null;
   }
 }
@@ -1008,13 +1292,11 @@ function applyFbx(object) {
     else state.hasMatchedIds = true;
   }
   if (missingIds.length) {
-    alert(`Missing FBX IDs: ${missingIds.join(", ")}`);
+    alert(t("missingFbxIds", { ids: missingIds.join(", ") }));
   }
 
   if (!state.hasMatchedIds && state.meshes.length) {
-    alert(
-      "No CSV IDs matched the FBX. Showing all elements as completed."
-    );
+    alert(t("noCsvMatch"));
   }
 
   frameObject(object);
@@ -1279,7 +1561,7 @@ function startPlayback() {
     if (next > state.projectEnd) {
       state.currentDate = state.projectEnd;
       stopPlayback();
-      dom.playBtn.textContent = "Play";
+      dom.playBtn.textContent = t("play");
       state.isPlaying = false;
     } else {
       state.currentDate = next;

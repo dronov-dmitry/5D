@@ -88,6 +88,10 @@ button.secondary {
   text-align: left;
 }
 
+.menu-select {
+  padding: 6px 8px;
+}
+
 .access-banner {
   background: #fff3cd;
   border: 1px solid #ffeeba;
