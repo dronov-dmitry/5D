@@ -189,6 +189,18 @@ function parseSetting(text, key) {
   return "";
 }
 
+function apiUrl(pathname) {
+  const base = CONFIG.api?.baseUrl || CONFIG.apiBase || "";
+  if (!base) return pathname;
+  if (base.endsWith("/") && pathname.startsWith("/")) {
+    return `${base.slice(0, -1)}${pathname}`;
+  }
+  if (!base.endsWith("/") && !pathname.startsWith("/")) {
+    return `${base}/${pathname}`;
+  }
+  return `${base}${pathname}`;
+}
+
 async function initAuth() {
   const config = await fetchConfig();
   state.auth.config = config;
@@ -201,7 +213,7 @@ async function initAuth() {
 
 async function fetchConfig() {
   try {
-    const response = await fetch("/api/config", { cache: "no-store" });
+    const response = await fetch(apiUrl("/api/config"), { cache: "no-store" });
     if (!response.ok) {
       state.auth.configError = `HTTP ${response.status}`;
       return {};
@@ -334,7 +346,7 @@ async function handleGoogleCredential(response) {
 
 async function exchangeGoogleCredential(credential) {
   try {
-    const response = await fetch("/api/auth/google", {
+    const response = await fetch(apiUrl("/api/auth/google"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ credential }),
@@ -463,7 +475,7 @@ async function apiFetch(path, options = {}) {
   if (state.auth.token) {
     headers.Authorization = `Bearer ${state.auth.token}`;
   }
-  const response = await fetch(path, { ...options, headers });
+  const response = await fetch(apiUrl(path), { ...options, headers });
   return response;
 }
 
@@ -676,7 +688,7 @@ async function loadAll() {
 
 async function fetchSchedule(csvText) {
   try {
-    const response = await fetch("/api/parse-csv", {
+    const response = await fetch(apiUrl("/api/parse-csv"), {
       method: "POST",
       headers: { "Content-Type": "text/csv" },
       body: csvText,
