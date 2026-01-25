@@ -587,20 +587,17 @@ async function ensureGoogleReady(clientId) {
 function attachAuthHandlers() {
   if (dom.accountMenuBtn && dom.accountMenu) {
     const openMenu = () => {
-      dom.accountMenu.classList.remove("hidden");
-      dom.accountMenu.style.display = "flex";
+      dom.accountMenu.classList.add("open");
     };
     const closeMenu = () => {
-      dom.accountMenu.classList.add("hidden");
-      dom.accountMenu.style.display = "none";
+      dom.accountMenu.classList.remove("open");
     };
-    dom.accountMenu.classList.remove("hidden");
     closeMenu();
     dom.accountMenuBtn.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
       console.log("accountMenuBtn click");
-      const isOpen = dom.accountMenu.style.display === "flex";
+      const isOpen = dom.accountMenu.classList.contains("open");
       if (isOpen) closeMenu();
       else openMenu();
     });
