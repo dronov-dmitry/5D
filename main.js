@@ -13,6 +13,7 @@ const dom = {
   loadBtn: document.getElementById("loadBtn"),
   downloadIdsBtn: document.getElementById("downloadIdsBtn"),
   authStatus: document.getElementById("authStatus"),
+  menuRoot: document.querySelector(".menu"),
   accountMenuBtn: document.getElementById("accountMenuBtn"),
   accountMenu: document.getElementById("accountMenu"),
   menuUserLine: document.getElementById("menuUserLine"),
