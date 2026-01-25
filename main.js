@@ -27,7 +27,7 @@ const dom = {
   serverStatusBanner: document.getElementById("serverStatusBanner"),
   adminPanel: document.getElementById("adminPanel"),
   adminTitle: document.getElementById("adminTitle"),
-  adminUserInput: document.getElementById("adminUserInput"),
+  adminUserSelect: document.getElementById("adminUserSelect"),
   adminRoleSelect: document.getElementById("adminRoleSelect"),
   adminRoleBtn: document.getElementById("adminRoleBtn"),
   adminListBtn: document.getElementById("adminListBtn"),
@@ -120,6 +120,7 @@ const I18N = {
     view3d: "3D View",
     adminTools: "Admin tools",
     adminInputPlaceholder: "User email or Google ID",
+    adminSelectPlaceholder: "Select user email",
     setRole: "Set role",
     loadUsers: "Load users",
     loadUsersFailed: "Failed to load users",
@@ -171,6 +172,7 @@ const I18N = {
     view3d: "3D-Ansicht",
     adminTools: "Admin-Werkzeuge",
     adminInputPlaceholder: "E-Mail oder Google-ID",
+    adminSelectPlaceholder: "Benutzer wählen",
     setRole: "Rolle setzen",
     loadUsers: "Benutzer laden",
     loadUsersFailed: "Benutzer konnten nicht geladen werden",
@@ -225,6 +227,7 @@ const I18N = {
     view3d: "3D вид",
     adminTools: "Админ-инструменты",
     adminInputPlaceholder: "Email пользователя или Google ID",
+    adminSelectPlaceholder: "Выберите email",
     setRole: "Установить роль",
     loadUsers: "Загрузить пользователей",
     loadUsersFailed: "Не удалось загрузить пользователей",
@@ -279,6 +282,7 @@ const I18N = {
     view3d: "3D вигляд",
     adminTools: "Адмін-інструменти",
     adminInputPlaceholder: "Email користувача або Google ID",
+    adminSelectPlaceholder: "Оберіть email",
     setRole: "Встановити роль",
     loadUsers: "Завантажити користувачів",
     loadUsersFailed: "Не вдалося завантажити користувачів",
@@ -364,8 +368,12 @@ function applyTranslations() {
   if (dom.adminTitle) dom.adminTitle.textContent = t("adminTools");
   if (dom.adminRoleBtn) dom.adminRoleBtn.textContent = t("setRole");
   if (dom.adminListBtn) dom.adminListBtn.textContent = t("loadUsers");
-  if (dom.adminUserInput)
-    dom.adminUserInput.placeholder = t("adminInputPlaceholder");
+  if (dom.adminUserSelect && !dom.adminUserSelect.options.length) {
+    const option = document.createElement("option");
+    option.value = "";
+    option.textContent = t("adminSelectPlaceholder");
+    dom.adminUserSelect.appendChild(option);
+  }
   if (state.isPlaying && dom.playBtn) dom.playBtn.textContent = t("pause");
   if (!state.isPlaying && dom.playBtn) dom.playBtn.textContent = t("play");
   updateAccessUi();
@@ -785,6 +793,13 @@ function updateAuthUi() {
   if (dom.adminPanel) {
     const isAdmin = user && user.role === "admin";
     dom.adminPanel.classList.toggle("hidden", !isAdmin);
+    if (isAdmin && dom.adminUserSelect && dom.adminUserSelect.options.length <= 1) {
+      fetchUsers()
+        .then((users) => {
+          if (users) populateAdminUserSelect(users);
+        })
+        .catch(() => {});
+    }
   }
   updateAccessUi();
   updateServerStatusBanner();
@@ -862,21 +877,46 @@ async function loadUserList() {
   if (!dom.adminListOutput) return;
   dom.adminListOutput.textContent = t("loading");
   try {
-    const response = await apiFetch("/api/users");
-    const payload = await response.json();
-    if (!response.ok) {
-      dom.adminListOutput.textContent =
-        payload.error || t("loadUsersFailed");
+    const users = await fetchUsers();
+    if (!users) {
+      dom.adminListOutput.textContent = t("loadUsersFailed");
       return;
     }
-    dom.adminListOutput.textContent = JSON.stringify(payload.users, null, 2);
+    populateAdminUserSelect(users);
+    dom.adminListOutput.textContent = JSON.stringify(users, null, 2);
   } catch (error) {
     dom.adminListOutput.textContent = t("loadUsersFailed");
   }
 }
 
+async function fetchUsers() {
+  const response = await apiFetch("/api/users");
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) return null;
+  return Array.isArray(payload.users) ? payload.users : [];
+}
+
+function populateAdminUserSelect(users) {
+  if (!dom.adminUserSelect) return;
+  dom.adminUserSelect.innerHTML = "";
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = t("adminSelectPlaceholder");
+  dom.adminUserSelect.appendChild(placeholder);
+  const emails = users
+    .map((user) => user.email)
+    .filter((email) => typeof email === "string" && email.trim());
+  const unique = Array.from(new Set(emails)).sort();
+  for (const email of unique) {
+    const option = document.createElement("option");
+    option.value = email;
+    option.textContent = email;
+    dom.adminUserSelect.appendChild(option);
+  }
+}
+
 async function setUserRoleFromUi() {
-  const input = dom.adminUserInput?.value?.trim() || "";
+  const input = dom.adminUserSelect?.value?.trim() || "";
   const role = dom.adminRoleSelect?.value || "";
   if (!input || !role) {
     alert(t("roleUpdatePrompt"));
