@@ -330,6 +330,7 @@ function detectLanguage() {
 function setLanguage(lang) {
   state.locale = I18N[lang] ? lang : "en";
   localStorage.setItem("app_lang", state.locale);
+  document.documentElement.lang = state.locale;
   if (dom.languageSelect) {
     dom.languageSelect.value = state.locale;
   }
@@ -2042,9 +2043,11 @@ function selectGanttTask(task) {
 }
 
 function bootApp() {
+  setLanguage(detectLanguage());
   initConfig();
   initAuth();
-  setLanguage(detectLanguage());
+  const appRoot = document.getElementById("app");
+  if (appRoot) appRoot.classList.remove("app-hidden");
 }
 
 window.addEventListener("load", bootApp);
