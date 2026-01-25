@@ -587,9 +587,11 @@ async function ensureGoogleReady(clientId) {
 function attachAuthHandlers() {
   if (dom.accountMenuBtn && dom.accountMenu) {
     const openMenu = () => {
+      dom.accountMenu.classList.remove("hidden");
       dom.accountMenu.style.display = "flex";
     };
     const closeMenu = () => {
+      dom.accountMenu.classList.add("hidden");
       dom.accountMenu.style.display = "none";
     };
     closeMenu();
