@@ -1,4 +1,10 @@
 export const CONFIG = {
+  api: {
+    // Base URL for backend API (empty = same origin)
+    baseUrl: "https://confident-dream-67666.pktriot.net/",
+  },
+  // Backward-compatible alias for API base (use api.baseUrl instead)
+  apiBase: "",
   viewer: {
     // Цвет фона сцены
     backgroundColor: 0xf0f0f0,
@@ -154,3 +160,4 @@ export const CONFIG = {
     screenProximityPx: 40,
   },
 };
+
