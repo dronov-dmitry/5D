@@ -20,6 +20,7 @@ const dom = {
   logoutBtn: document.getElementById("logoutBtn"),
   paypalBtn: document.getElementById("paypalBtn"),
   accessBanner: document.getElementById("accessBanner"),
+  serverStatusBanner: document.getElementById("serverStatusBanner"),
   adminPanel: document.getElementById("adminPanel"),
   adminUserInput: document.getElementById("adminUserInput"),
   adminRoleSelect: document.getElementById("adminRoleSelect"),
@@ -83,6 +84,7 @@ const state = {
     googleReady: false,
     googleInitPromise: null,
     configError: "",
+    serverAvailable: true,
   },
 };
 
@@ -209,6 +211,7 @@ async function initAuth() {
   await restoreAuthSession();
   await handlePaypalReturn();
   updateAuthUi();
+  scheduleServerCheck();
 }
 
 async function fetchConfig() {
@@ -216,12 +219,18 @@ async function fetchConfig() {
     const response = await fetch(apiUrl("/api/config"), { cache: "no-store" });
     if (!response.ok) {
       state.auth.configError = `HTTP ${response.status}`;
+      state.auth.serverAvailable = false;
+      updateServerStatusBanner();
       return {};
     }
     state.auth.configError = "";
+    state.auth.serverAvailable = true;
+    updateServerStatusBanner();
     return await response.json();
   } catch (error) {
     state.auth.configError = "Fetch failed";
+    state.auth.serverAvailable = false;
+    updateServerStatusBanner();
     return {};
   }
 }
@@ -444,6 +453,7 @@ function updateAuthUi() {
     dom.adminPanel.classList.toggle("hidden", !isAdmin);
   }
   updateAccessUi();
+  updateServerStatusBanner();
 }
 
 function updateAccessUi() {
@@ -468,6 +478,44 @@ function updateAccessUi() {
   dom.accessBanner.textContent =
     `Trial expired. Please subscribe for ${price} ${currency} / month.`;
   dom.accessBanner.classList.remove("hidden");
+}
+
+function scheduleServerCheck() {
+  setInterval(async () => {
+    if (state.auth.serverAvailable) return;
+    const latest = await fetchConfig();
+    if (latest?.googleClientId) {
+      state.auth.config = latest;
+    }
+  }, 60000);
+}
+
+function getBerlinTimeString() {
+  try {
+    const formatter = new Intl.DateTimeFormat("de-DE", {
+      timeZone: "Europe/Berlin",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    });
+    return formatter.format(new Date());
+  } catch (error) {
+    return "";
+  }
+}
+
+function updateServerStatusBanner() {
+  if (!dom.serverStatusBanner) return;
+  if (state.auth.serverAvailable) {
+    dom.serverStatusBanner.classList.add("hidden");
+    return;
+  }
+  const nowBerlin = getBerlinTimeString();
+  const timeSuffix = nowBerlin ? ` Сейчас в Берлине: ${nowBerlin}.` : "";
+  dom.serverStatusBanner.textContent =
+    "Сервер недоступен. Сайт работает с 7:00 до 23:00 по берлинскому времени." +
+    timeSuffix;
+  dom.serverStatusBanner.classList.remove("hidden");
 }
 
 async function apiFetch(path, options = {}) {
