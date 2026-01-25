@@ -452,7 +452,9 @@ async function initConfig() {
 
 async function loadDebugFlag() {
   try {
-    const response = await fetch("/settings.txt", { cache: "no-store" });
+    const response = await fetch(staticUrl("settings.txt"), {
+      cache: "no-store",
+    });
     if (!response.ok) return false;
     const text = await response.text();
     const value = parseSetting(text, "isDebug");
@@ -486,6 +488,14 @@ function apiUrl(pathname) {
     return `${base}/${pathname}`;
   }
   return `${base}${pathname}`;
+}
+
+function staticUrl(pathname) {
+  const current = window.location.pathname;
+  const basePath = current.endsWith("/")
+    ? current
+    : current.slice(0, current.lastIndexOf("/") + 1);
+  return `${basePath}${pathname}`;
 }
 
 async function initAuth() {
