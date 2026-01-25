@@ -20,8 +20,8 @@
     <div id="app" class="app-hidden">
       <div class="auth-row">
         <div id="authStatus" class="auth-status">Not signed in</div>
-        <div class="menu">
-          <button id="accountMenuBtn" type="button" class="secondary">Account ▾</button>
+        <details class="menu" id="accountMenuDetails">
+          <summary id="accountMenuBtn" class="secondary">Account ▾</summary>
           <div id="accountMenu" class="menu-panel">
             <div class="menu-item" id="menuUserLine">Not signed in</div>
             <button id="signInBtn" type="button" class="menu-action">Sign in with Google</button>
@@ -35,7 +35,7 @@
               <option value="uk">Українська</option>
             </select>
           </div>
-        </div>
+        </details>
       </div>
       <div id="accessBanner" class="access-banner hidden"></div>
       <div id="serverStatusBanner" class="access-banner hidden"></div>

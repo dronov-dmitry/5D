@@ -16,6 +16,7 @@ const dom = {
   menuRoot: document.querySelector(".menu"),
   accountMenuBtn: document.getElementById("accountMenuBtn"),
   accountMenu: document.getElementById("accountMenu"),
+  accountMenuDetails: document.getElementById("accountMenuDetails"),
   menuUserLine: document.getElementById("menuUserLine"),
   signInBtn: document.getElementById("signInBtn"),
   logoutBtn: document.getElementById("logoutBtn"),
@@ -587,7 +588,9 @@ async function ensureGoogleReady(clientId) {
 }
 
 function attachAuthHandlers() {
-  if (dom.accountMenuBtn && dom.accountMenu) {
+  if (dom.accountMenuDetails) {
+    // Use native <details> toggling; no JS needed here.
+  } else if (dom.accountMenuBtn && dom.accountMenu) {
     const openMenu = () => {
       dom.accountMenu.classList.add("open");
       dom.accountMenu.style.display = "flex";

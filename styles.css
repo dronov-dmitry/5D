@@ -67,6 +67,14 @@ button.secondary {
   z-index: 2000;
 }
 
+.menu summary {
+  list-style: none;
+}
+
+.menu summary::-webkit-details-marker {
+  display: none;
+}
+
 .menu-panel {
   position: absolute;
   right: 0;
@@ -83,8 +91,8 @@ button.secondary {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
-.menu-panel.open {
-  display: flex !important;
+details.menu[open] .menu-panel {
+  display: flex;
 }
 
 .menu-item {
