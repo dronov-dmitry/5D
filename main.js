@@ -49,10 +49,6 @@ const dom = {
   viewer: document.getElementById("viewer"),
 };
 
-initConfig();
-initAuth();
-setLanguage(detectLanguage());
-
 window.addEventListener("error", () => {
   const warning = document.getElementById("initWarning");
   if (warning) warning.classList.remove("hidden");
@@ -368,6 +364,10 @@ function applyTranslations() {
   updateAccessUi();
   updateServerStatusBanner();
 }
+
+initConfig();
+initAuth();
+setLanguage(detectLanguage());
 
 const renderer = new THREE.WebGLRenderer({
   antialias: CONFIG.viewer.antialias,

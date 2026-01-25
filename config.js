@@ -160,4 +160,3 @@ export const CONFIG = {
     screenProximityPx: 40,
   },
 };
-
