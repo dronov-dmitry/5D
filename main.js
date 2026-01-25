@@ -586,11 +586,23 @@ async function ensureGoogleReady(clientId) {
 
 function attachAuthHandlers() {
   if (dom.accountMenuBtn && dom.accountMenu) {
+    const openMenu = () => {
+      dom.accountMenu.classList.remove("hidden");
+      dom.accountMenu.style.display = "flex";
+    };
+    const closeMenu = () => {
+      dom.accountMenu.classList.add("hidden");
+      dom.accountMenu.style.display = "";
+    };
     dom.accountMenuBtn.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
       console.log("accountMenuBtn click");
-      dom.accountMenu.classList.toggle("hidden");
+      if (dom.accountMenu.classList.contains("hidden")) {
+        openMenu();
+      } else {
+        closeMenu();
+      }
     });
     dom.accountMenu.addEventListener("click", (event) => {
       event.stopPropagation();
@@ -598,7 +610,7 @@ function attachAuthHandlers() {
     document.addEventListener("click", (event) => {
       const target = event.target;
       if (!dom.accountMenu.contains(target) && target !== dom.accountMenuBtn) {
-        dom.accountMenu.classList.add("hidden");
+        closeMenu();
       }
     });
   }
