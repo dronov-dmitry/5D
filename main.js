@@ -129,6 +129,7 @@ const I18N = {
     serverCsvFailed: "Server CSV parsing failed.",
     serverUnreachable: "Server is not reachable. Falling back to local CSV parsing.",
     googleAuthFailed: "Google auth failed",
+    googleAuthExpired: "Session expired. Please sign in again.",
     googleNotConfigured: "Google auth is not configured",
     googleNotAvailable: "Google auth is not available. Check network/adblock.",
     roleUpdatePrompt: "Enter user email or id and select role.",
@@ -180,6 +181,7 @@ const I18N = {
     serverUnreachable:
       "Server nicht erreichbar. Lokales CSV-Parsing wird verwendet.",
     googleAuthFailed: "Google-Authentifizierung fehlgeschlagen",
+    googleAuthExpired: "Sitzung abgelaufen. Bitte erneut anmelden.",
     googleNotConfigured: "Google-Authentifizierung ist nicht konfiguriert",
     googleNotAvailable:
       "Google-Authentifizierung ist nicht verfügbar. Netzwerk/Adblock prüfen.",
@@ -233,6 +235,7 @@ const I18N = {
     serverUnreachable:
       "Сервер недоступен. Используется локальный разбор CSV.",
     googleAuthFailed: "Ошибка авторизации Google",
+    googleAuthExpired: "Сессия истекла. Войдите снова.",
     googleNotConfigured: "Google авторизация не настроена",
     googleNotAvailable:
       "Google авторизация недоступна. Проверь сеть/AdBlock.",
@@ -286,6 +289,7 @@ const I18N = {
     serverUnreachable:
       "Сервер недоступний. Використовується локальний розбір CSV.",
     googleAuthFailed: "Помилка авторизації Google",
+    googleAuthExpired: "Сесія закінчилась. Увійдіть знову.",
     googleNotConfigured: "Google авторизацію не налаштовано",
     googleNotAvailable:
       "Google авторизація недоступна. Перевірте мережу/AdBlock.",
@@ -639,7 +643,8 @@ async function handleGoogleCredential(response) {
   await exchangeGoogleCredential(credential);
 }
 
-async function exchangeGoogleCredential(credential) {
+async function exchangeGoogleCredential(credential, options = {}) {
+  const silent = options.silent === true;
   try {
     const response = await fetch(apiUrl("/api/auth/google"), {
       method: "POST",
@@ -648,13 +653,27 @@ async function exchangeGoogleCredential(credential) {
     });
     const payload = await response.json();
     if (!response.ok) {
-      alert(payload.error || t("googleAuthFailed"));
+      if (silent) {
+        clearAuthSession();
+        return;
+      }
+      const rawError = String(payload.error || "");
+      if (rawError.toLowerCase().includes("token used too late")) {
+        alert(t("googleAuthExpired"));
+      } else {
+        alert(t("googleAuthFailed"));
+      }
+      if (rawError) {
+        console.warn("Google auth error:", rawError);
+      }
       return;
     }
     setAuthSession(credential, payload.user);
     await refreshMe();
   } catch (error) {
-    alert(t("googleAuthFailed"));
+    if (!silent) {
+      alert(t("googleAuthFailed"));
+    }
   }
 }
 
@@ -688,7 +707,7 @@ function clearAuthSession() {
 async function restoreAuthSession() {
   const token = localStorage.getItem("id_token") || "";
   if (!token) return;
-  await exchangeGoogleCredential(token);
+  await exchangeGoogleCredential(token, { silent: true });
 }
 
 async function refreshMe() {
