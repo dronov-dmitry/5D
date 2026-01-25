@@ -594,6 +594,7 @@ function attachAuthHandlers() {
       dom.accountMenu.classList.add("hidden");
       dom.accountMenu.style.display = "none";
     };
+    dom.accountMenu.classList.remove("hidden");
     closeMenu();
     dom.accountMenuBtn.addEventListener("click", (event) => {
       event.preventDefault();
