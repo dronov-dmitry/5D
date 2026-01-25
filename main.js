@@ -588,27 +588,26 @@ function attachAuthHandlers() {
   if (dom.accountMenuBtn && dom.accountMenu) {
     const openMenu = () => {
       dom.accountMenu.classList.add("open");
+      dom.accountMenu.style.display = "flex";
     };
     const closeMenu = () => {
       dom.accountMenu.classList.remove("open");
+      dom.accountMenu.style.display = "none";
     };
     closeMenu();
-    dom.accountMenuBtn.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      console.log("accountMenuBtn click");
-      const isOpen = dom.accountMenu.classList.contains("open");
-      if (isOpen) closeMenu();
-      else openMenu();
-    });
+    dom.accountMenuBtn.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const isOpen = dom.accountMenu.classList.contains("open");
+        if (isOpen) closeMenu();
+        else openMenu();
+      },
+      true
+    );
     dom.accountMenu.addEventListener("click", (event) => {
       event.stopPropagation();
-    });
-    document.addEventListener("click", (event) => {
-      const target = event.target;
-      if (!dom.accountMenu.contains(target) && target !== dom.accountMenuBtn) {
-        closeMenu();
-      }
     });
   }
   if (dom.signInBtn) {

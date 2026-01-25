@@ -80,7 +80,7 @@ button.secondary {
 }
 
 .menu-panel.open {
-  display: flex;
+  display: flex !important;
 }
 
 .menu-item {
