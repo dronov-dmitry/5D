@@ -452,7 +452,7 @@ async function initConfig() {
 
 async function loadDebugFlag() {
   try {
-    const response = await fetch(staticUrl("settings.txt"), {
+    const response = await fetch(assetUrl("settings.txt"), {
       cache: "no-store",
     });
     if (!response.ok) return false;
@@ -490,12 +490,12 @@ function apiUrl(pathname) {
   return `${base}${pathname}`;
 }
 
-function staticUrl(pathname) {
-  const current = window.location.pathname;
-  const basePath = current.endsWith("/")
-    ? current
-    : current.slice(0, current.lastIndexOf("/") + 1);
-  return `${basePath}${pathname}`;
+function assetUrl(pathname) {
+  try {
+    return new URL(pathname, import.meta.url).toString();
+  } catch (error) {
+    return pathname;
+  }
 }
 
 async function initAuth() {
