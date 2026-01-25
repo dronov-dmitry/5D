@@ -586,8 +586,13 @@ async function ensureGoogleReady(clientId) {
 
 function attachAuthHandlers() {
   if (dom.accountMenuBtn && dom.accountMenu) {
-    dom.accountMenuBtn.addEventListener("click", () => {
+    dom.accountMenuBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       dom.accountMenu.classList.toggle("hidden");
+    });
+    dom.accountMenu.addEventListener("click", (event) => {
+      event.stopPropagation();
     });
     document.addEventListener("click", (event) => {
       const target = event.target;
