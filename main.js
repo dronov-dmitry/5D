@@ -1997,4 +1997,12 @@ function selectGanttTask(task) {
   updateViews();
 }
 
+function bootApp() {
+  initConfig();
+  initAuth();
+  setLanguage(detectLanguage());
+}
+
+window.addEventListener("load", bootApp);
+
 window.__appReady = true;
