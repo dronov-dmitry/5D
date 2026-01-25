@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>App 12 5D Viewer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="initWarning" class="warning hidden">
+      App scripts did not start.
+      <div id="initWarningDetails">
+        Open this page via a local server (for example: python -m http.server)
+        and reload. Ensure `vendor/three.module.js`, `vendor/OrbitControls.js`,
+        `vendor/FBXLoader.js`, `vendor/libs/fflate.module.js`,
+        `vendor/curves/NURBSCurve.js` exist.
+      </div>
+      <div id="initError" class="warning-detail"></div>
+    </div>
+    <div id="app">
+      <div class="auth-row">
+        <div id="authStatus" class="auth-status">Not signed in</div>
+        <div class="menu">
+          <button id="accountMenuBtn" type="button" class="secondary">
+            Account ▾
+          </button>
+          <div id="accountMenu" class="menu-panel hidden">
+            <div class="menu-item" id="menuUserLine">Not signed in</div>
+            <button id="signInBtn" type="button" class="menu-action">
+              Sign in with Google
+            </button>
+            <button id="logoutBtn" type="button" class="menu-action hidden">
+              Sign out
+            </button>
+            <button id="paypalBtn" type="button" class="menu-action hidden">
+              Upgrade €10 / month
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="accessBanner" class="access-banner hidden"></div>
+      <div id="adminPanel" class="admin-panel hidden">
+        <div class="panel-title">Admin tools</div>
+        <div class="admin-row">
+          <input
+            id="adminUserInput"
+            type="text"
+            placeholder="User email or Google ID"
+          />
+          <select id="adminRoleSelect">
+            <option value="admin">admin</option>
+            <option value="free">free</option>
+            <option value="paid">paid</option>
+            <option value="user">user</option>
+          </select>
+          <button id="adminRoleBtn" type="button">Set role</button>
+          <button id="adminListBtn" type="button">Load users</button>
+        </div>
+        <pre id="adminListOutput" class="admin-output"></pre>
+      </div>
+      <div class="top-row">
+        <div class="file-group">
+          <input id="fbxPath" type="text" placeholder="FBX file path" readonly />
+          <button
+            id="fbxBtn"
+            type="button"
+            onclick="document.getElementById('fbxInput').click()"
+          >
+            FBX...
+          </button>
+          <input id="fbxInput" type="file" accept=".fbx" hidden />
+        </div>
+        <div class="file-group">
+          <input id="csvPath" type="text" placeholder="CSV file path" readonly />
+          <button
+            id="csvBtn"
+            type="button"
+            onclick="document.getElementById('csvInput').click()"
+          >
+            CSV...
+          </button>
+          <input id="csvInput" type="file" accept=".csv,text/csv" hidden />
+        </div>
+        <button id="loadBtn" type="button" class="primary">Load</button>
+        <button id="downloadIdsBtn" type="button">Download FBX IDs</button>
+      </div>
+
+      <div class="controls-row">
+        <button id="playBtn" type="button">Play</button>
+        <label>
+          Step (days)
+          <input id="stepInput" type="number" min="1" step="1" value="1" />
+        </label>
+        <div class="label-pair">
+          <span class="label">Date:</span>
+          <span id="dateLabel">-</span>
+        </div>
+        <div class="label-pair">
+          <span class="label">Selected:</span>
+          <span id="selectedLabel">-</span>
+        </div>
+        <div class="label-pair">
+          <span class="label">Stage cost:</span>
+          <span id="stageCostLabel">-</span>
+        </div>
+      </div>
+
+      <div class="slider-row">
+        <input id="timeline" type="range" min="0" max="0" value="0" />
+        <div id="rangeLabel">-</div>
+      </div>
+
+      <div class="main-grid">
+        <div class="left-panel">
+          <div class="panel gantt-panel">
+            <div class="panel-title">Gantt</div>
+            <canvas id="ganttCanvas"></canvas>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Costs</div>
+            <canvas id="costsCanvas"></canvas>
+          </div>
+        </div>
+        <div class="right-panel panel">
+          <div class="panel-title">3D View</div>
+          <div id="viewer"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__appReady = false;
+      window.addEventListener("load", () => {
+        setTimeout(async () => {
+          if (window.__appReady) return;
+          const warning = document.getElementById("initWarning");
+          const details = document.getElementById("initWarningDetails");
+          if (warning) warning.classList.remove("hidden");
+          if (!details) return;
+          try {
+            const response = await fetch("vendor/three.module.js", {
+              cache: "no-store",
+            });
+            if (!response.ok) {
+              details.textContent =
+                "vendor/three.module.js is not reachable. Start the server " +
+                "in the project folder and check the URL.";
+            } else {
+              details.textContent =
+                "vendor files are reachable, but modules failed to start. " +
+                "Check browser console for details.";
+            }
+          } catch (error) {
+            details.textContent =
+              "vendor/three.module.js fetch failed. Start the server in the " +
+              "project folder and check the URL.";
+          }
+        }, 1200);
+      });
+    </script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three.module.js"
+        }
+      }
+    </script>
+    <script
+      type="module"
+      src="main.js"
+      onerror="document.getElementById('initWarning').classList.remove('hidden');document.getElementById('initWarningDetails').textContent='main.js failed to load.';"
+    ></script>
+  </body>
+</html>
