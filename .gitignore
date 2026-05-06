@@ -1,0 +1,15 @@
+# Exclude development files
+.DS_Store
+Thumbs.db
+*.log
+*.swp
+*.swo
+*~
+
+# Exclude local config (if you create one)
+config.local.js
+
+# Exclude IDE files
+.vscode/
+.idea/
+*.sublime-*

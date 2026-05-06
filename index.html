@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ── Primary SEO ── -->
+  <title>5D Viewer — 4D/5D BIM-визуализация строительства онлайн | Ганта, затраты, 3D</title>
+  <meta name="description" content="Бесплатный онлайн-инструмент для 4D/5D BIM-визуализации строительных проектов. Загрузите FBX-модель и CSV-расписание — получите интерактивный 3D-вид, диаграмму Ганта и кривую затрат. Без установки. 3 дня бесплатно." />
+  <meta name="keywords" content="4D BIM, 5D BIM, строительная визуализация, диаграмма Ганта, FBX viewer, 3D строительство, управление строительным проектом, BIM онлайн, Revit FBX, ArchiCAD экспорт" />
+  <meta name="author" content="App 12 5D" />
+  <meta name="robots" content="index, follow" />
+  <meta name="google-site-verification" content="ft00KUFjG8AJXxE1fEwM55aMh6BFeZsk0rJoN8FKVVs" />
+
+  <!-- ── Canonical & hreflang ── -->
+  <link rel="canonical" href="https://dronov-dmitry.github.io/5D/" />
+  <link rel="alternate" hreflang="ru" href="https://dronov-dmitry.github.io/5D/" />
+  <link rel="alternate" hreflang="en" href="https://dronov-dmitry.github.io/5D/?lang=en" />
+  <link rel="alternate" hreflang="de" href="https://dronov-dmitry.github.io/5D/?lang=de" />
+  <link rel="alternate" hreflang="uk" href="https://dronov-dmitry.github.io/5D/?lang=uk" />
+  <link rel="alternate" hreflang="x-default" href="https://dronov-dmitry.github.io/5D/" />
+
+  <!-- ── Open Graph ── -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://dronov-dmitry.github.io/5D/" />
+  <meta property="og:site_name"   content="5D Viewer" />
+  <meta property="og:title"       content="5D Viewer — 4D/5D BIM-визуализация строительства онлайн" />
+  <meta property="og:description" content="Загрузите FBX-модель и CSV-расписание — получите интерактивный 3D-вид, диаграмму Ганта и кривую затрат. Без установки. 3 дня бесплатно." />
+  <meta property="og:image"       content="https://dronov-dmitry.github.io/5D/og-image.png" />
+  <meta property="og:image:width"  content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale"      content="ru_RU" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <meta property="og:locale:alternate" content="de_DE" />
+
+  <!-- ── Twitter Card ── -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="5D Viewer — 4D/5D BIM-визуализация строительства" />
+  <meta name="twitter:description" content="Интерактивный 3D-вид, Ганта и затраты в одном окне. Без установки." />
+  <meta name="twitter:image"       content="https://dronov-dmitry.github.io/5D/og-image.png" />
+
+  <!-- ── Schema.org JSON-LD ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "5D Viewer",
+    "alternateName": "App 12 5D",
+    "applicationCategory": "BusinessApplication",
+    "applicationSubCategory": "Construction Management",
+    "operatingSystem": "Web Browser (Chrome, Firefox, Edge)",
+    "url": "https://dronov-dmitry.github.io/5D/",
+    "description": "Онлайн-инструмент для 4D/5D BIM-визуализации строительных проектов. Загрузите FBX-модель и CSV-расписание — получите интерактивный 3D-вид, диаграмму Ганта и кривую затрат.",
+    "screenshot": "https://dronov-dmitry.github.io/5D/og-image.png",
+    "featureList": [
+      "Интерактивная 3D-визуализация строительства (WebGL)",
+      "Диаграмма Ганта с привязкой к 3D-элементам",
+      "Кривая накопленных затрат по этапам",
+      "Временна́я шкала с пошаговой анимацией",
+      "Поддержка FBX-моделей из Revit, ArchiCAD, Navisworks",
+      "Импорт расписания из CSV (Excel, Google Sheets)",
+      "Работает в браузере без установки",
+      "Авторизация через Google"
+    ],
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Trial",
+        "price": "0",
+        "priceCurrency": "EUR",
+        "description": "3 дня бесплатного полного доступа",
+        "availability": "https://schema.org/InStock"
+      },
+      {
+        "@type": "Offer",
+        "name": "Pro",
+        "price": "10",
+        "priceCurrency": "EUR",
+        "billingIncrement": "P1M",
+        "description": "Неограниченный доступ, оплата через PayPal",
+        "availability": "https://schema.org/InStock"
+      }
+    ],
+    "inLanguage": ["ru", "en", "de", "uk"],
+    "isAccessibleForFree": true,
+    "softwareVersion": "1.0",
+    "author": {
+      "@type": "Person",
+      "name": "Dmitry Dronov",
+      "url": "https://github.com/dronov-dmitry"
+    },
+    "sameAs": [
+      "https://github.com/dronov-dmitry/5D",
+      "https://youtu.be/pL_BOoI8qFA"
+    ]
+  }
+  </script>
+
+  <!-- ── Fonts ── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=block" rel="stylesheet" />
+  <link rel="stylesheet" href="landing.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner container">
+      <a href="#" class="nav-logo">
+        <span class="logo-icon">📐</span>
+        <span class="logo-text"> <strong>5D</strong></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features" id="nav-features">Возможности</a></li>
+        <li><a href="#how"      id="nav-how">Как работает</a></li>
+        <li><a href="#pricing"  id="nav-pricing">Тарифы</a></li>
+      </ul>
+      <div class="nav-right">
+        <select id="lang-select" class="lang-select" onchange="setLang(this.value)" aria-label="Language">
+          <option value="en">EN</option>
+          <option value="de">DE</option>
+          <option value="ru" selected>RU</option>
+          <option value="uk">UK</option>
+        </select>
+        <a href="./app/" id="nav-open" class="btn btn-primary nav-cta">Открыть приложение</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-blob hero-blob-1"></div>
+      <div class="hero-blob hero-blob-2"></div>
+      <div class="hero-grid"></div>
+    </div>
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span id="hero-badge">4D / 5D Construction Viewer</span>
+        </div>
+        <h1 class="hero-title" id="hero-title">
+          Ваш строительный<br>проект — <em>в движении</em>
+        </h1>
+        <p class="hero-subtitle" id="hero-sub">
+          Загрузите 3D-модель и расписание — и наблюдайте, как объект строится день за днём.
+        </p>
+        <div class="hero-actions">
+          <a href="./app/" class="btn btn-primary btn-lg">
+            <span id="hero-cta">Попробовать бесплатно</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="https://youtu.be/pL_BOoI8qFA" target="_blank" rel="noreferrer" class="btn btn-ghost btn-lg">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.6"/><path d="M7 6.5l5 2.5-5 2.5V6.5z" fill="currentColor"/></svg>
+            <span id="hero-demo">Смотреть демо</span>
+          </a>
+        </div>
+        <div class="hero-meta">
+          <span class="meta-item">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.5L12 5l-2.5 2.5.5 3.5L7 9.5 4 11l.5-3.5L2 5l3.5-.5L7 1z" fill="currentColor"/></svg>
+            <span id="meta-trial">3 дня бесплатно</span>
+          </span>
+          <span class="meta-sep">·</span>
+          <span class="meta-item">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M1 6h12" stroke="currentColor" stroke-width="1.4"/></svg>
+            <span id="meta-price">€3 / месяц</span>
+          </span>
+          <span class="meta-sep">·</span>
+          <span class="meta-item">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1C3.7 1 1 3.7 1 7s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6z" stroke="currentColor" stroke-width="1.4"/><path d="M7 4v3l2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <span id="meta-noinstall">Без установки</span>
+          </span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="app-mockup">
+          <div class="mockup-bar">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span class="mockup-title">5D — 4D/5D Construction Viewer</span>
+          </div>
+          <div class="mockup-body">
+            <div class="mockup-header-row">
+              <div class="mockup-badge-pill">4D / 5D Construction Viewer</div>
+              <div class="mockup-auth-pill">● Signed in</div>
+            </div>
+            <div class="mockup-toolbar">
+              <div class="mockup-input">model.fbx</div>
+              <div class="mockup-input">schedule.csv</div>
+              <div class="mockup-btn-load">Load</div>
+            </div>
+            <div class="mockup-main">
+              <div class="mockup-left">
+                <div class="mockup-panel gantt-mock">
+                  <div class="panel-label">Gantt</div>
+                  <div class="gantt-rows">
+                    <div class="gantt-row"><div class="gantt-bar" style="width:80%;background:#6aa4ff"></div></div>
+                    <div class="gantt-row"><div class="gantt-bar" style="width:55%;background:#5bbf5b"></div></div>
+                    <div class="gantt-row"><div class="gantt-bar" style="width:35%;background:#ff3333;opacity:.7"></div></div>
+                    <div class="gantt-row"><div class="gantt-bar" style="width:65%;background:#6aa4ff"></div></div>
+                    <div class="gantt-row"><div class="gantt-bar" style="width:20%;background:#5bbf5b"></div></div>
+                    <div class="gantt-row"><div class="gantt-bar" style="width:45%;background:#6aa4ff"></div></div>
+                  </div>
+                </div>
+                <div class="mockup-panel costs-mock">
+                  <div class="panel-label">Costs</div>
+                  <svg viewBox="0 0 160 60" class="costs-svg">
+                    <polyline points="0,55 20,48 40,38 60,30 80,22 100,18 120,14 140,10 160,8" fill="none" stroke="#2f6fed" stroke-width="2"/>
+                    <line x1="90" y1="0" x2="90" y2="60" stroke="#ff3333" stroke-width="1.2" stroke-dasharray="3,2"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="mockup-panel viewer-mock">
+                <div class="panel-label">3D View</div>
+                <div class="viewer-3d">
+                  <div class="building-3d">
+                    <div class="b-floor b-f1"></div>
+                    <div class="b-floor b-f2"></div>
+                    <div class="b-floor b-f3"></div>
+                    <div class="b-floor b-f4 active"></div>
+                    <div class="b-floor b-f5 active"></div>
+                  </div>
+                  <div class="viewer-label-date">15 Apr 2025</div>
+                </div>
+              </div>
+            </div>
+            <div class="mockup-timeline">
+              <div class="timeline-track"><div class="timeline-thumb"></div></div>
+              <div class="timeline-btns">
+                <div class="tl-btn">▶ Play</div>
+                <div class="tl-date">2025-04-15</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mockup-glow"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="container stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">3D</div>
+        <div class="stat-label" id="stat-3d-label">Интерактивная модель<br/>на WebGL / Three.js</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">4D</div>
+        <div class="stat-label" id="stat-4d-label">Временна́я шкала<br/>и диаграмма Ганта</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">5D</div>
+        <div class="stat-label" id="stat-5d-label">График затрат<br/>по этапам</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">FBX</div>
+        <div class="stat-label" id="stat-fbx-label">Поддержка моделей<br/>из Revit, ArchiCAD, Navisworks</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features" aria-label="Возможности приложения">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag" id="feat-tag">Возможности</div>
+        <h2 class="section-title" id="feat-title">Всё, что нужно для<br/>контроля строительства</h2>
+        <p class="section-sub" id="feat-sub">Один инструмент вместо трёх: 3D-просмотр, планирование и финансы.</p>
+      </div>
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon-wrap accent-teal">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="3" y="3" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h22M10 10v15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3 id="feat1-title">Диаграмма Ганта</h3>
+          <p id="feat1-text">Все этапы строительства на одном экране. Выберите задачу — и соответствующие элементы модели подсветятся в 3D.</p>
+          <div class="feature-tag" id="feat1-tag">Интерактивная</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrap accent-blue">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M4 22L10 14l5 4 5-8 4 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 id="feat2-title">Кривая затрат</h3>
+          <p id="feat2-text">Накопленные расходы по дням. Видите, где план расходится с фактом.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrap accent-orange">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4a10 10 0 100 20A10 10 0 0014 4z" stroke="currentColor" stroke-width="1.8"/><path d="M14 8v6l4 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3 id="feat3-title">Временна́я шкала</h3>
+          <p id="feat3-text">Перемотайте проект вперёд или назад. Шаг — от 1 дня до любого периода.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrap accent-teal">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M6 22L14 6l8 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3 id="feat4-title">3D-навигация</h3>
+          <p id="feat4-text">Вращение, масштаб, панорама. Кликните на элемент — увидите его задачу и стоимость.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrap accent-blue">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="4" y="6" width="20" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M4 11h20" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="8.5" r="1" fill="currentColor"/><circle cx="13" cy="8.5" r="1" fill="currentColor"/></svg>
+          </div>
+          <h3 id="feat5-title">Работает в браузере</h3>
+          <p id="feat5-text">Никакой установки. Откройте ссылку — и сразу работайте. Chrome, Firefox, Edge.</p>
+          <div class="feature-tag" id="feat5-tag">Без установки</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrap accent-orange">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4l2.5 5 5.5.8-4 3.9.9 5.5L14 17l-4.9 2.2.9-5.5-4-3.9 5.5-.8L14 4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 id="feat6-title">Вход через Google</h3>
+          <p id="feat6-text">Авторизация за один клик. 3 дня бесплатного доступа сразу после входа — без карты.</p>
+          <div class="feature-tag" id="feat6-tag">Бесплатно</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how" aria-label="Как работает приложение">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag" id="how-tag">Как работает</div>
+        <h2 class="section-title" id="how-title">Три шага до<br/>живой модели</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <h3 id="how1-title">Загрузите FBX-модель</h3>
+            <p id="how1-text">Экспортируйте 3D-модель из Revit, ArchiCAD или любого BIM-инструмента в формате FBX. Каждый элемент должен иметь уникальный ID в имени.</p>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <h3 id="how2-title">Добавьте CSV-расписание</h3>
+            <p id="how2-text">Таблица с колонками: ID элемента, название задачи, дата начала, дата окончания, стоимость. Формат простой — Excel или Google Sheets.</p>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-content">
+            <h3 id="how3-title">Нажмите Load и смотрите</h3>
+            <p id="how3-text">Приложение свяжет модель с расписанием. Двигайте ползунок — и наблюдайте, как строится объект, растут затраты и заполняется Гантт.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing" id="pricing" aria-label="Тарифы и цены">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag" id="pricing-tag">Тарифы</div>
+        <h2 class="section-title" id="pricing-title">Просто и честно</h2>
+        <p class="section-sub" id="pricing-sub">Начните бесплатно, платите только когда нужно.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-name" id="trial-name">Trial</div>
+          <div class="pricing-price"><span class="price-num">0</span><span class="price-cur">€</span></div>
+          <div class="pricing-period" id="trial-period">3 дня бесплатно</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> <span id="trial-f1">Полный доступ ко всем функциям</span></li>
+            <li><span class="check">✓</span> <span id="trial-f2">FBX + CSV без ограничений</span></li>
+            <li><span class="check">✓</span> <span id="trial-f3">3D, Ганта, затраты</span></li>
+            <li><span class="check">✓</span> <span id="trial-f4">Вход через Google</span></li>
+          </ul>
+          <a href="./app/" class="btn btn-outline btn-full" id="trial-cta">Начать бесплатно</a>
+        </div>
+        <div class="pricing-card pricing-card-featured">
+          <div class="pricing-badge" id="pro-badge">Популярный</div>
+          <div class="pricing-name" id="pro-name">Pro</div>
+          <div class="pricing-price"><span class="price-num">3</span><span class="price-cur">€</span></div>
+          <div class="pricing-period" id="pro-period">в месяц</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> <span id="pro-f1">Всё из Trial</span></li>
+            <li><span class="check">✓</span> <span id="pro-f2">Неограниченное использование</span></li>
+            <li><span class="check">✓</span> <span id="pro-f3">Оплата через PayPal</span></li>
+            <li><span class="check">✓</span> <span id="pro-f4">Приоритетная поддержка</span></li>
+          </ul>
+          <a href="./app/" class="btn btn-primary btn-full" id="pro-cta">Подключить Pro</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container cta-inner">
+      <div class="cta-glow"></div>
+      <h2 class="cta-title" id="cta-title">Готовы увидеть свой<br/>проект в движении?</h2>
+      <p class="cta-sub" id="cta-sub">Загрузите модель прямо сейчас — никакой регистрации для первого запуска не нужно.</p>
+      <div class="cta-actions">
+        <a href="./app/" class="btn btn-primary btn-lg" id="cta-open">Открыть приложение</a>
+        <a href="https://github.com/dronov-dmitry/5D" target="_blank" rel="noreferrer" class="btn btn-ghost btn-lg">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1C4.58 1 1 4.58 1 9c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.33c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.21 1.86.86 2.31.66.07-.51.28-.86.51-1.06-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.67 7.67 0 019 5.16c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0017 9c0-4.42-3.58-8-8-8z" fill="currentColor"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <!-- <span class="logo-icon">📐</span> -->
+        <!-- <span class="logo-text"> <strong>5D</strong></span> -->
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/dronov-dmitry/5D" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://youtu.be/pL_BOoI8qFA" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="./app/" id="footer-app">Приложение</a>
+      </div>
+      <div class="footer-copy">© 2025 5D</div>
+    </div>
+  </footer>
+
+  <script src="landing.js"></script>
+</body>
+</html>
