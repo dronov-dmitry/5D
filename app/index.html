@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>5D Viewer</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E📐%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="initWarning" class="warning hidden">
+      App scripts did not start.
+      <div id="initWarningDetails">
+        Open this page via a local server (for example: python -m http.server)
+        and reload. Ensure `vendor/three.module.js`, `vendor/OrbitControls.js`,
+        `vendor/FBXLoader.js`, `vendor/libs/fflate.module.js`,
+        `vendor/curves/NURBSCurve.js` exist.
+      </div>
+      <div id="initError" class="warning-detail"></div>
+    </div>
+    <div id="app" class="app-hidden">
+      <header class="hero-header">
+        <div class="hero-copy">
+          <div class="hero-badge" id="heroBadge">4D / 5D Construction Viewer</div>
+          <h1 class="hero-title"><a href="../" class="hero-title-link">5D</a></h1>
+          <p class="hero-subtitle" id="heroSubtitle">
+            Explore schedule, costs and 3D progress in one interactive workspace.
+          </p>
+        </div>
+        <div class="auth-row">
+          <div class="toolbar-panel">
+            <div class="toolbar-section toolbar-section-status">
+              <span class="status-label" id="statusLabel">Session</span>
+              <span id="authStatus" class="auth-status">Not signed in</span>
+            </div>
+            <div class="toolbar-divider"></div>
+            <div class="toolbar-section toolbar-section-lang">
+              <label for="languageSelect" id="languageLabel">Lang</label>
+              <select id="languageSelect" class="menu-select">
+                <option value="en">English</option>
+                <option value="de">Deutsch</option>
+                <option value="ru">Русский</option>
+                <option value="uk">Українська</option>
+              </select>
+            </div>
+            <div class="toolbar-divider"></div>
+            <div class="toolbar-section toolbar-section-btns">
+              <button id="infoMenuBtn" type="button" class="toolbar-btn" onclick="window.location.href='../info.html'">
+                <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M7.5 6.5v4M7.5 4.5v.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                Info
+              </button>
+              <details class="menu" id="accountMenuDetails">
+                <summary id="accountMenuBtn" class="toolbar-btn">
+                  <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.4"/><path d="M2 13c0-3 2.5-5 5.5-5s5.5 2 5.5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                  Account
+                </summary>
+                <div id="accountMenu" class="menu-panel">
+                  <div class="menu-item" id="menuUserLine">Not signed in</div>
+                  <div id="turnstileWrap" class="menu-item turnstile-wrap hidden">
+                    <div id="turnstileStatus" class="turnstile-status">
+                      Verify that you are human to unlock sign in.
+                    </div>
+                    <div id="turnstileContainer" class="turnstile-container"></div>
+                  </div>
+                  <div id="signInUnlockHint" class="menu-item hidden">
+                    Sign in is available after Turnstile verification.
+                  </div>
+                  <div id="signInBtnWrap" class="menu-action gsi-signin-wrap hidden">
+                    <div id="gsiButtonContainer"></div>
+                  </div>
+                  <button id="logoutBtn" type="button" class="menu-action hidden">Sign out</button>
+                  <button id="paypalBtn" type="button" class="menu-action hidden">Upgrade €3 / month</button>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div id="accessBanner" class="access-banner hidden"></div>
+      <div id="serverStatusBanner" class="access-banner hidden"></div>
+      <div id="adminPanel" class="admin-panel hidden">
+        <div class="panel-title" id="adminTitle">Admin tools</div>
+        <div class="admin-row">
+          <select id="adminUserSelect"></select>
+          <select id="adminRoleSelect">
+            <option value="admin">admin</option>
+            <option value="free">free</option>
+            <option value="paid">paid</option>
+            <option value="user">user</option>
+          </select>
+          <button id="adminRoleBtn" type="button">Set role</button>
+          <button id="adminListBtn" type="button">Load users</button>
+        </div>
+        <pre id="adminListOutput" class="admin-output"></pre>
+      </div>
+      <div class="top-row surface-card">
+        <div class="file-group">
+          <input id="fbxPath" type="text" placeholder="FBX file path" readonly />
+          <button
+            id="fbxBtn"
+            type="button"
+            onclick="document.getElementById('fbxInput').click()"
+          >
+            FBX...
+          </button>
+          <input id="fbxInput" type="file" accept=".fbx" hidden />
+        </div>
+        <div class="file-group">
+          <input id="csvPath" type="text" placeholder="CSV file path" readonly />
+          <button
+            id="csvBtn"
+            type="button"
+            onclick="document.getElementById('csvInput').click()"
+          >
+            CSV...
+          </button>
+          <input id="csvInput" type="file" accept=".csv,text/csv" hidden />
+        </div>
+        <button id="loadBtn" type="button" class="primary">Load</button>
+        <button id="downloadIdsBtn" type="button">Download FBX IDs</button>
+      </div>
+
+      <div class="controls-row surface-card">
+        <button id="playBtn" type="button">Play</button>
+        <label>
+          <span id="stepLabel">Step (days)</span>
+          <input id="stepInput" type="number" min="1" step="1" value="1" />
+        </label>
+        <div class="label-pair">
+          <span class="label" id="dateLabelTitle">Date:</span>
+          <span id="dateLabel">-</span>
+        </div>
+        <div class="label-pair">
+          <span class="label" id="selectedLabelTitle">Selected:</span>
+          <span id="selectedLabel">-</span>
+        </div>
+        <div class="label-pair">
+          <span class="label" id="stageCostLabelTitle">Stage cost:</span>
+          <span id="stageCostLabel">-</span>
+        </div>
+      </div>
+
+      <div class="slider-row surface-card">
+        <input id="timeline" type="range" min="0" max="0" value="0" />
+        <div id="rangeLabel">-</div>
+      </div>
+
+      <div class="main-grid">
+        <div class="left-panel">
+          <div class="panel gantt-panel">
+            <div class="panel-title" id="ganttTitle">Gantt</div>
+            <canvas id="ganttCanvas"></canvas>
+          </div>
+          <div class="panel">
+            <div class="panel-title" id="costsTitle">Costs</div>
+            <canvas id="costsCanvas"></canvas>
+          </div>
+        </div>
+        <div class="right-panel panel">
+          <div class="panel-title" id="viewTitle">3D View</div>
+          <div id="viewer"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__appReady = false;
+      window.addEventListener("load", () => {
+        setTimeout(async () => {
+          if (window.__appReady) return;
+          const warning = document.getElementById("initWarning");
+          const details = document.getElementById("initWarningDetails");
+          if (warning) warning.classList.remove("hidden");
+          if (!details) return;
+          try {
+            const response = await fetch("vendor/three.module.js", {
+              cache: "no-store",
+            });
+            if (!response.ok) {
+              details.textContent =
+                "vendor/three.module.js is not reachable. Start the server " +
+                "in the project folder and check the URL.";
+            } else {
+              details.textContent =
+                "vendor files are reachable, but modules failed to start. " +
+                "Check browser console for details.";
+            }
+          } catch (error) {
+            details.textContent =
+              "vendor/three.module.js fetch failed. Start the server in the " +
+              "project folder and check the URL.";
+          }
+        }, 1200);
+      });
+    </script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      async
+      defer
+    ></script>
+    <link rel="icon" href="data:,">
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three.module.js"
+        }
+      }
+    </script>
+    <script
+      type="module"
+      src="main.js"
+      onerror="document.getElementById('initWarning').classList.remove('hidden');document.getElementById('initWarningDetails').textContent='main.js failed to load.';"
+    ></script>
+  </body>
+</html>
